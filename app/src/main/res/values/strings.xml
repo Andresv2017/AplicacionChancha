@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Chancha</string>
+    <string name="login_titulo">Iniciar Sesión</string>
+    <string name="login_subtitulo">Gestiona tus gastos compartidos</string>
+    <string name="label_correo">Correo institucional</string>
+    <string name="label_contrasena">Contraseña</string>
+    <string name="btn_ingresar">Ingresar</string>
+    <string name="link_registro">¿No tienes cuenta? Regístrate</string>
+    <string name="link_olvide">¿Olvidaste tu contraseña?</string>
+    <string name="registro_titulo">Crear cuenta</string>
+    <string name="label_nombre">Nombre completo</string>
+    <string name="label_confirmar">Confirmar contraseña</string>
+    <string name="btn_registrarse">Registrarse</string>
+    <string name="link_ya_tengo">¿Ya tienes cuenta? Inicia sesión</string>
+    <string name="recuperar_titulo">Recuperar contraseña</string>
+    <string name="recuperar_descripcion">Ingresa tu correo institucional y te enviaremos instrucciones para recuperar tu contraseña.</string>
+    <string name="btn_enviar">Enviar instrucciones</string>
+    <string name="link_volver_login">Volver al inicio de sesión</string>
+    <string name="cargando">Cargando...</string>
+    <string name="error_campos_vacios">Completa todos los campos</string>
+    <string name="error_correo_invalido">El correo debe ser institucional (.edu.pe)</string>
+    <string name="error_contrasenas">Las contraseñas no coinciden</string>
+</resources>
