@@ -38,7 +38,7 @@ public class AgregarGastoActivity extends AppCompatActivity {
     private ProgressBar       progressBar;
     private SessionManager    session;
     private int               grupoId;
-    private boolean           isAdjusting  = false; // evita recursión en auto-ajuste
+    private boolean           isAdjusting  = false;
 
     private final List<JsonObject>        miembros     = new ArrayList<>();
     private final List<TextInputEditText> camposPartes = new ArrayList<>();
@@ -65,7 +65,6 @@ public class AgregarGastoActivity extends AppCompatActivity {
         rgDivision     = findViewById(R.id.rgDivision);
         progressBar    = findViewById(R.id.progressBar);
 
-        // Recalcular al cambiar el total según el modo activo
         etMonto.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {}
             @Override public void onTextChanged(CharSequence s, int i, int i1, int i2) {}
@@ -74,7 +73,7 @@ public class AgregarGastoActivity extends AppCompatActivity {
                 if (checkedId == R.id.rbEquitativa) {
                     recalcularEquitativa();
                 } else if (checkedId == R.id.rbPersonalizada) {
-                    autoAjustarUltimoCampo(); // total cambió → ajustar último campo
+                    autoAjustarUltimoCampo();
                 }
             }
         });
@@ -88,7 +87,7 @@ public class AgregarGastoActivity extends AppCompatActivity {
                 configurarModoPartes(true);
                 bloquearCamposPartes(false);
                 rellenarPorcentajeIgual();
-            } else {                              // personalizada
+            } else {
                 configurarModoPartes(false);
                 bloquearCamposPartes(false);
             }
@@ -143,7 +142,6 @@ public class AgregarGastoActivity extends AppCompatActivity {
             int    uid    = m.get("id").getAsInt();
             String nombre = m.get("nombre").getAsString();
 
-            // RadioButton del pagador
             int rbId = View.generateViewId();
             RadioButton rb = new RadioButton(this);
             rb.setId(rbId);
@@ -158,7 +156,6 @@ public class AgregarGastoActivity extends AppCompatActivity {
             rgPagadores.addView(rb);
             if (uid == session.getUserId()) defaultCheckId = rbId;
 
-            // Campo de monto/porcentaje por miembro
             TextInputLayout til = new TextInputLayout(this, null,
                     com.google.android.material.R.style
                             .Widget_Material3_TextInputLayout_OutlinedBox);
@@ -174,7 +171,6 @@ public class AgregarGastoActivity extends AppCompatActivity {
                             android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
             et.setTag(uid);
 
-            // Auto-ajustar último campo cuando cualquier campo anterior cambia
             final int myIndex = camposPartes.size();
             et.addTextChangedListener(new TextWatcher() {
                 @Override public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {}
@@ -210,7 +206,6 @@ public class AgregarGastoActivity extends AppCompatActivity {
     // Helpers de división
     // -------------------------------------------------------------------------
 
-    /** Cambia los hints y el sufijo de los campos según el modo activo. */
     private void configurarModoPartes(boolean esPorcentaje) {
         for (int i = 0; i < tilesPartes.size(); i++) {
             String nombre = miembros.get(i).get("nombre").getAsString();
@@ -219,7 +214,6 @@ public class AgregarGastoActivity extends AppCompatActivity {
         }
     }
 
-    /** Rellena los campos con porcentajes iguales (suma = 100). */
     private void rellenarPorcentajeIgual() {
         if (miembros.isEmpty()) return;
         int    n         = miembros.size();
@@ -231,15 +225,10 @@ public class AgregarGastoActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Ajusta el último campo para que la suma total coincida.
-     * Se llama automáticamente cuando cambia el total o cualquier campo en modo personalizada.
-     */
     private void autoAjustarUltimoCampo() {
         if (camposPartes.size() < 2) return;
         int checkedId = rgDivision.getCheckedRadioButtonId();
 
-        // Referencia: 100 para porcentaje, monto total para personalizada
         double referencia;
         if (checkedId == R.id.rbPorcentaje) {
             referencia = 100.0;
@@ -249,7 +238,7 @@ public class AgregarGastoActivity extends AppCompatActivity {
             if (TextUtils.isEmpty(montoStr)) return;
             try { referencia = Double.parseDouble(montoStr); } catch (NumberFormatException e) { return; }
         } else {
-            return; // equitativa se maneja aparte
+            return;
         }
 
         double sum = 0;
@@ -265,7 +254,6 @@ public class AgregarGastoActivity extends AppCompatActivity {
         isAdjusting = false;
     }
 
-    /** Recalcula montos iguales a partir del total ingresado. */
     private void recalcularEquitativa() {
         if (miembros.isEmpty()) return;
         String montoStr = etMonto.getText() != null ? etMonto.getText().toString().trim() : "";
@@ -333,7 +321,6 @@ public class AgregarGastoActivity extends AppCompatActivity {
         JsonArray partes = new JsonArray();
 
         if (esPorcentaje) {
-            // ── Modo porcentaje: leer %, validar suma=100, calcular montos ──
             double[] porcentajes = new double[miembros.size()];
             double   sumaPct     = 0;
             for (int i = 0; i < miembros.size(); i++) {
@@ -359,7 +346,6 @@ public class AgregarGastoActivity extends AppCompatActivity {
                 partes.add(p);
             }
         } else {
-            // ── Modo equitativo o personalizado: validar suma de montos ──
             double sumaPartes = 0;
             for (int i = 0; i < miembros.size(); i++) {
                 int    uid  = miembros.get(i).get("id").getAsInt();

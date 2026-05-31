@@ -45,8 +45,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO Sprint 1 - Módulo recuperar contraseña (US03)
-        // Por ahora mostramos confirmación visual
         progressBar.setVisibility(View.VISIBLE);
         btnEnviar.setEnabled(false);
 

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.aplicacionchancha.R;
 import com.example.aplicacionchancha.network.ApiClient;
 import com.example.aplicacionchancha.utils.SessionManager;
+import com.google.android.material.card.MaterialCardView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -92,9 +93,8 @@ public class BalancesFragment extends Fragment {
             boolean esMiDeuda  = b.get("es_mi_deuda").getAsBoolean();
             boolean meDeben    = b.get("me_deben").getAsBoolean();
 
-            // Card contenedor
-            com.google.android.material.card.MaterialCardView card =
-                    new com.google.android.material.card.MaterialCardView(requireContext());
+            MaterialCardView card =
+                    new MaterialCardView(requireContext());
             LinearLayout.LayoutParams cardLp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -103,11 +103,10 @@ public class BalancesFragment extends Fragment {
             card.setRadius(dp(12));
             card.setCardElevation(dp(2));
 
-            // Color de fondo según estado
             if (esMiDeuda) {
-                card.setCardBackgroundColor(0xFFFFF3F3); // rojo muy suave
+                card.setCardBackgroundColor(0xFFFFF3F3);
             } else if (meDeben) {
-                card.setCardBackgroundColor(0xFFF1FAF1); // verde muy suave
+                card.setCardBackgroundColor(0xFFF1FAF1);
             } else {
                 card.setCardBackgroundColor(0xFFFFFFFF);
             }

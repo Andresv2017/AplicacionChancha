@@ -44,7 +44,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         holder.tvRol.setText(esCreador ? "Admin" : "Miembro");
         holder.tvRol.setVisibility(esCreador ? View.VISIBLE : View.GONE);
 
-        // Inicial del nombre como avatar
         holder.tvAvatar.setText(String.valueOf(nombre.charAt(0)).toUpperCase());
     }
 

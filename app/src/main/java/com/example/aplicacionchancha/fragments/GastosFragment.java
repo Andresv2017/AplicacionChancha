@@ -102,7 +102,6 @@ public class GastosFragment extends Fragment {
                                         session.getUserId(),
                                         esAdmin,
                                         gasto -> {
-                                            // Admin toca "Editar"
                                             Intent intent = new Intent(requireContext(),
                                                     EditarGastoActivity.class);
                                             intent.putExtra("gasto_id",

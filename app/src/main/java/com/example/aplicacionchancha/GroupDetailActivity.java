@@ -55,7 +55,6 @@ public class GroupDetailActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Determinar si el usuario es admin antes de montar los fragments
         determinarAdmin();
     }
 

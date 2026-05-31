@@ -70,7 +70,6 @@ public class EditarGastoActivity extends AppCompatActivity {
         rgDivision     = findViewById(R.id.rgDivision);
         progressBar    = findViewById(R.id.progressBar);
 
-        // Recalcular al cambiar el total según el modo activo
         etMonto.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {}
             @Override public void onTextChanged(CharSequence s, int i, int i1, int i2) {}
@@ -95,8 +94,7 @@ public class EditarGastoActivity extends AppCompatActivity {
                 configurarModoPartes(true);
                 bloquearCamposPartes(false);
                 rellenarPorcentajeIgual();
-            } else {                             // personalizada
-                configurarModoPartes(false);
+            } else {                                             configurarModoPartes(false);
                 bloquearCamposPartes(false);
             }
         });
@@ -239,7 +237,6 @@ public class EditarGastoActivity extends AppCompatActivity {
                 }
             });
 
-            // Pre-llenar con el monto existente
             for (int j = 0; j < partesExistentes.size(); j++) {
                 JsonObject p = partesExistentes.get(j).getAsJsonObject();
                 if (p.get("usuario_id").getAsInt() == uid) {
@@ -257,7 +254,6 @@ public class EditarGastoActivity extends AppCompatActivity {
         llPagadores.addView(rgPagadores);
         if (defaultCheckId != View.NO_ID) rgPagadores.check(defaultCheckId);
 
-        // Restaurar el modo de división con el que se creó el gasto
         if ("equitativa".equals(tipoDivision)) {
             rgDivision.check(R.id.rbEquitativa);
             configurarModoPartes(false);
@@ -265,7 +261,6 @@ public class EditarGastoActivity extends AppCompatActivity {
             recalcularEquitativa();
             bloquearCamposPartes(true);
         } else if ("porcentaje".equals(tipoDivision)) {
-            // Convertir montos guardados a porcentajes para mostrar
             String montoStr = etMonto.getText() != null
                     ? etMonto.getText().toString().replace(",", ".").trim() : "0";
             double totalMonto = 0;

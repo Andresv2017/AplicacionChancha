@@ -77,7 +77,6 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.ViewHolder> 
             holder.tvMiParte.setText("");
         }
 
-        // Botón editar solo para admin
         if (esAdmin) {
             holder.tvEditar.setVisibility(View.VISIBLE);
             holder.tvEditar.setOnClickListener(v -> {

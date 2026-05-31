@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aplicacionchancha.utils.SessionManager;
 
-// Pantalla de entrada: revisa si hay sesion activa y redirige
 public class MainActivity extends AppCompatActivity {
 
     @Override
