@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         rvGrupos.setLayoutManager(new LinearLayoutManager(this));
 
         findViewById(R.id.fabNuevoGrupo).setOnClickListener(v ->
-                startActivity(new Intent(this, CreateGroupActivity.class)));
+                startActivity(new Intent(this, CrearGrupoActivity.class)));
     }
 
     @Override
@@ -145,7 +145,7 @@ public class HomeActivity extends AppCompatActivity {
                             tvSinGrupos.setVisibility(View.GONE);
                             rvGrupos.setVisibility(View.VISIBLE);
                             rvGrupos.setAdapter(new GroupAdapter(lista, grupo -> {
-                                Intent intent = new Intent(HomeActivity.this, GroupDetailActivity.class);
+                                Intent intent = new Intent(HomeActivity.this, DetalleGrupoActivity.class);
                                 intent.putExtra("grupo_id", grupo.get("id").getAsInt());
                                 intent.putExtra("grupo_nombre", grupo.get("nombre").getAsString());
                                 intent.putExtra("codigo_invitacion", grupo.get("codigo_invitacion").getAsString());

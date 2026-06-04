@@ -6,7 +6,7 @@
         android:id="@+id/action_notifications"
         android:title="Notificaciones"
         app:showAsAction="always"
-        app:actionLayout="@layout/menu_item_bell"/>
+        app:actionLayout="@layout/menu_item_campana"/>
 
     <item
         android:id="@+id/action_profile"

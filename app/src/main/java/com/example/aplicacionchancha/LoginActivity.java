@@ -41,11 +41,11 @@ public class LoginActivity extends AppCompatActivity {
 
         TextView tvRegistro = findViewById(R.id.tvRegistro);
         tvRegistro.setOnClickListener(v ->
-                startActivity(new Intent(this, RegisterActivity.class)));
+                startActivity(new Intent(this, RegistroActivity.class)));
 
         TextView tvOlvide = findViewById(R.id.tvOlvide);
         tvOlvide.setOnClickListener(v ->
-                startActivity(new Intent(this, ForgotPasswordActivity.class)));
+                startActivity(new Intent(this, RecuperarPasswordActivity.class)));
     }
 
     private void intentarLogin() {

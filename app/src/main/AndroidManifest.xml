@@ -27,12 +27,12 @@
         </activity>
 
         <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".RegistroActivity" />
+        <activity android:name=".RecuperarPasswordActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".CreateGroupActivity" />
-        <activity android:name=".GroupDetailActivity" />
-        <activity android:name=".AddMembersActivity" />
+        <activity android:name=".CrearGrupoActivity" />
+        <activity android:name=".DetalleGrupoActivity" />
+        <activity android:name=".AgregarMiembrosActivity" />
         <activity android:name=".AgregarGastoActivity" />
         <activity android:name=".EditarGastoActivity" />
         <activity android:name=".CrearColectaActivity" />

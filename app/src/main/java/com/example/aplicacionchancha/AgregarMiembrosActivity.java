@@ -21,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddMembersActivity extends AppCompatActivity {
+public class AgregarMiembrosActivity extends AppCompatActivity {
 
     private TextInputLayout tilCorreo;
     private TextInputEditText etCorreo;
@@ -35,7 +35,7 @@ public class AddMembersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_members);
+        setContentView(R.layout.activity_agregar_miembros);
 
         session = new SessionManager(this);
         grupoId = getIntent().getIntExtra("grupo_id", 0);
@@ -117,20 +117,21 @@ public class AddMembersActivity extends AppCompatActivity {
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         progressBar.setVisibility(View.GONE);
                         if (response.isSuccessful()) {
-                            Toast.makeText(AddMembersActivity.this,
+                            Toast.makeText(AgregarMiembrosActivity.this,
                                     "Miembro agregado correctamente", Toast.LENGTH_SHORT).show();
                             cardUsuario.setVisibility(View.GONE);
                             etCorreo.setText("");
                             usuarioEncontradoId = -1;
                         } else {
-                            Toast.makeText(AddMembersActivity.this,
+                            Toast.makeText(AgregarMiembrosActivity.this,
                                     "No se pudo agregar al miembro", Toast.LENGTH_SHORT).show();
                         }
                     }
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(AddMembersActivity.this, "Sin conexión", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AgregarMiembrosActivity.this,
+                                "Sin conexión", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

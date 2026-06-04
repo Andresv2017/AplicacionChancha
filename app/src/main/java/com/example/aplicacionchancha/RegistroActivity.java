@@ -18,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegistroActivity extends AppCompatActivity {
 
     private TextInputEditText etNombre, etCorreo, etContrasena, etConfirmar;
     private Button btnRegistrarse;
@@ -27,7 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_registro);
 
         etNombre     = findViewById(R.id.etNombre);
         etCorreo     = findViewById(R.id.etCorreo);
@@ -76,9 +76,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 setLoading(false);
                 if (response.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this,
+                    Toast.makeText(RegistroActivity.this,
                             "Cuenta creada. Inicia sesión.", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    startActivity(new Intent(RegistroActivity.this, LoginActivity.class));
                     finish();
                 } else {
                     String msg = "Error al registrar";
@@ -87,14 +87,14 @@ public class RegisterActivity extends AppCompatActivity {
                                 .parse(response.errorBody().string()).getAsJsonObject();
                         msg = err.get("error").getAsString();
                     } catch (Exception ignored) {}
-                    Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistroActivity.this, msg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 setLoading(false);
-                Toast.makeText(RegisterActivity.this,
+                Toast.makeText(RegistroActivity.this,
                         "Error de conexión. Verifica que el servidor esté activo.", Toast.LENGTH_LONG).show();
             }
         });

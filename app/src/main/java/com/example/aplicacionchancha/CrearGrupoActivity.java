@@ -19,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateGroupActivity extends AppCompatActivity {
+public class CrearGrupoActivity extends AppCompatActivity {
 
     private TextInputLayout tilNombre, tilCodigo;
     private TextInputEditText etNombre, etCodigo;
@@ -29,7 +29,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_group);
+        setContentView(R.layout.activity_crear_grupo);
 
         session = new SessionManager(this);
 
@@ -67,18 +67,18 @@ public class CreateGroupActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         if (response.isSuccessful() && response.body() != null) {
                             String codigo = response.body().get("codigo_invitacion").getAsString();
-                            Toast.makeText(CreateGroupActivity.this,
+                            Toast.makeText(CrearGrupoActivity.this,
                                     "Grupo creado. Código: " + codigo, Toast.LENGTH_LONG).show();
                             finish();
                         } else {
-                            Toast.makeText(CreateGroupActivity.this,
+                            Toast.makeText(CrearGrupoActivity.this,
                                     "Error al crear el grupo", Toast.LENGTH_SHORT).show();
                         }
                     }
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(CreateGroupActivity.this,
+                        Toast.makeText(CrearGrupoActivity.this,
                                 "Sin conexión", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -103,7 +103,7 @@ public class CreateGroupActivity extends AppCompatActivity {
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         progressBar.setVisibility(View.GONE);
                         if (response.isSuccessful()) {
-                            Toast.makeText(CreateGroupActivity.this,
+                            Toast.makeText(CrearGrupoActivity.this,
                                     "¡Te uniste al grupo!", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
@@ -119,7 +119,7 @@ public class CreateGroupActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(CreateGroupActivity.this,
+                        Toast.makeText(CrearGrupoActivity.this,
                                 "Sin conexión", Toast.LENGTH_SHORT).show();
                     }
                 });

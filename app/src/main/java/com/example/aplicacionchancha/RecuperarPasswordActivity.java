@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class RecuperarPasswordActivity extends AppCompatActivity {
 
     private TextInputEditText etCorreo;
     private Button btnEnviar;
@@ -20,7 +20,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgot_password);
+        setContentView(R.layout.activity_recuperar_password);
 
         etCorreo    = findViewById(R.id.etCorreo);
         btnEnviar   = findViewById(R.id.btnEnviar);

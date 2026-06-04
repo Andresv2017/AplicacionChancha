@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GroupDetailActivity extends AppCompatActivity {
+public class DetalleGrupoActivity extends AppCompatActivity {
 
     private int     grupoId;
     private String  grupoNombre;
@@ -43,7 +43,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_detail);
+        setContentView(R.layout.activity_detalle_grupo);
 
         grupoId          = getIntent().getIntExtra("grupo_id", 0);
         grupoNombre      = getIntent().getStringExtra("grupo_nombre");
@@ -134,7 +134,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add_member) {
-            Intent intent = new Intent(this, AddMembersActivity.class);
+            Intent intent = new Intent(this, AgregarMiembrosActivity.class);
             intent.putExtra("grupo_id", grupoId);
             startActivity(intent);
             return true;
@@ -149,7 +149,6 @@ public class GroupDetailActivity extends AppCompatActivity {
         Toast.makeText(this, "Generando PDF…", Toast.LENGTH_SHORT).show();
         SessionManager session = new SessionManager(this);
 
-        // Necesitamos gastos + balances; hacemos ambas llamadas
         ApiClient.getService().listarGastos(session.getBearerToken(), grupoId)
                 .enqueue(new Callback<JsonObject>() {
                     @Override
@@ -179,7 +178,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        Toast.makeText(GroupDetailActivity.this,
+                        Toast.makeText(DetalleGrupoActivity.this,
                                 "Error al obtener datos", Toast.LENGTH_SHORT).show();
                     }
                 });
