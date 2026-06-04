@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_export_pdf"
+        android:title="Exportar PDF"
+        android:icon="@drawable/ic_export"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/action_add_member"
         android:title="Agregar miembro"
         android:icon="@drawable/ic_person_add"

@@ -40,4 +40,8 @@ public class SessionManager {
     public String getNombre()  { return prefs.getString(KEY_NOMBRE, "");   }
     public String getCorreo()  { return prefs.getString(KEY_CORREO, "");   }
     public String getBearerToken() { return "Bearer " + getToken(); }
+
+    public void guardarNombre(String nombre) {
+        editor.putString(KEY_NOMBRE, nombre).apply();
+    }
 }

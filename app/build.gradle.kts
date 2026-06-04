@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.viewpager2)
     implementation(libs.recyclerview)
+    implementation(libs.zxing.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

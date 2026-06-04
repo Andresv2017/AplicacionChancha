@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.aplicacionchancha.fragments.BalancesFragment;
+import com.example.aplicacionchancha.fragments.ColectasFragment;
 import com.example.aplicacionchancha.fragments.GastosFragment;
 import com.example.aplicacionchancha.fragments.MiembrosFragment;
 
@@ -29,10 +30,11 @@ public class GroupPagerAdapter extends FragmentStateAdapter {
         switch (position) {
             case 0: return GastosFragment.newInstance(grupoId, esAdmin);
             case 1: return BalancesFragment.newInstance(grupoId);
-            default: return MiembrosFragment.newInstance(grupoId, codigoInvitacion);
+            case 2: return MiembrosFragment.newInstance(grupoId, codigoInvitacion);
+            default: return ColectasFragment.newInstance(grupoId, esAdmin);
         }
     }
 
     @Override
-    public int getItemCount() { return 3; }
+    public int getItemCount() { return 4; }
 }

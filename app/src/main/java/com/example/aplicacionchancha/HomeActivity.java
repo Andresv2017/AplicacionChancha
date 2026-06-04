@@ -28,8 +28,11 @@ import retrofit2.Response;
 public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView rvGrupos;
-    private TextView tvSinGrupos, tvTotalDebo, tvTotalMeDeben;
+    private TextView     tvSinGrupos, tvTotalDebo, tvTotalMeDeben;
     private SessionManager session;
+
+    // Badge de notificaciones
+    private TextView tvBadge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +61,60 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Actualizar saludo por si el nombre cambió
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Hola, " + session.getNombre().split(" ")[0]);
+        }
         cargarGrupos();
+        verificarNotificaciones();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+
+        // Obtener la action view de la campana para el badge
+        MenuItem bellItem = menu.findItem(R.id.action_notifications);
+        if (bellItem != null && bellItem.getActionView() != null) {
+            tvBadge = bellItem.getActionView().findViewById(R.id.tvBadge);
+            bellItem.getActionView().setOnClickListener(v -> {
+                startActivity(new Intent(this, NotificacionesActivity.class));
+            });
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_profile) {
+            startActivity(new Intent(this, PerfilActivity.class));
+            return true;
+        } else if (id == R.id.action_logout) {
+            cerrarSesion();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void verificarNotificaciones() {
+        ApiClient.getService().listarNotificaciones(session.getBearerToken())
+                .enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        if (response.isSuccessful() && response.body() != null && tvBadge != null) {
+                            int noLeidas = response.body().get("no_leidas").getAsInt();
+                            if (noLeidas > 0) {
+                                tvBadge.setText(noLeidas > 9 ? "9+" : String.valueOf(noLeidas));
+                                tvBadge.setVisibility(View.VISIBLE);
+                            } else {
+                                tvBadge.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {}
+                });
     }
 
     private void cargarGrupos() {
@@ -100,21 +156,6 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {}
                 });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_logout) {
-            cerrarSesion();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void cerrarSesion() {

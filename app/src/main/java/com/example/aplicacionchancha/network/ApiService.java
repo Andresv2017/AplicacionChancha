@@ -7,6 +7,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -64,4 +65,42 @@ public interface ApiService {
 
     @GET("gastos/balances.php")
     Call<JsonObject> balancesGrupo(@Header("Authorization") String token, @Query("grupo_id") int grupoId);
+
+    // --- COLECTAS ---
+    @POST("colectas/crear.php")
+    Call<JsonObject> crearColecta(@Header("Authorization") String token, @Body JsonObject body);
+
+    @GET("colectas/listar.php")
+    Call<JsonObject> listarColectas(@Header("Authorization") String token, @Query("grupo_id") int grupoId);
+
+    @GET("colectas/detalle.php")
+    Call<JsonObject> detalleColecta(@Header("Authorization") String token, @Query("colecta_id") int colectaId);
+
+    @GET("colectas/detalle.php")
+    Call<JsonObject> detalleColectaPorQr(@Header("Authorization") String token, @Query("codigo_qr") String codigoQr);
+
+    @POST("colectas/pagar.php")
+    Call<JsonObject> pagarColecta(@Header("Authorization") String token, @Body JsonObject body);
+
+    @POST("colectas/confirmar.php")
+    Call<JsonObject> confirmarPago(@Header("Authorization") String token, @Body JsonObject body);
+
+    // --- NOTIFICACIONES ---
+    @GET("notificaciones/listar.php")
+    Call<JsonObject> listarNotificaciones(@Header("Authorization") String token);
+
+    @POST("notificaciones/marcar_leidas.php")
+    Call<JsonObject> marcarNotificacionesLeidas(@Header("Authorization") String token,
+                                                @Body JsonObject body);
+
+    // --- PERFIL ---
+    @GET("usuario/perfil.php")
+    Call<JsonObject> obtenerPerfil(@Header("Authorization") String token);
+
+    @PUT("usuario/perfil.php")
+    Call<JsonObject> editarPerfil(@Header("Authorization") String token, @Body JsonObject body);
+
+    // --- AUTH EXTRA ---
+    @POST("auth/cambiar_password.php")
+    Call<JsonObject> cambiarPassword(@Header("Authorization") String token, @Body JsonObject body);
 }
