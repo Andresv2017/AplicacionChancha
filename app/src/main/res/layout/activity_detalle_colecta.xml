@@ -28,7 +28,6 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
-            <!-- Card con QR e info de la colecta -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

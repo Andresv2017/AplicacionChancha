@@ -10,7 +10,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Gráfico de gastos por miembro -->
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChart"
             android:layout_width="match_parent"
