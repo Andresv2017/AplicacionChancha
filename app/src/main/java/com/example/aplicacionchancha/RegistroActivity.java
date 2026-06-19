@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aplicacionchancha.network.ApiClient;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -21,18 +24,20 @@ import retrofit2.Response;
 public class RegistroActivity extends AppCompatActivity {
 
     private TextInputEditText etNombre, etCorreo, etContrasena, etConfirmar;
-    private Button btnRegistrarse;
-    private ProgressBar progressBar;
+    private Button            btnRegistrarse;
+    private ProgressBar       progressBar;
+    private FirebaseAuth      mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
-        etNombre     = findViewById(R.id.etNombre);
-        etCorreo     = findViewById(R.id.etCorreo);
-        etContrasena = findViewById(R.id.etContrasena);
-        etConfirmar  = findViewById(R.id.etConfirmar);
+        mAuth          = FirebaseAuth.getInstance();
+        etNombre       = findViewById(R.id.etNombre);
+        etCorreo       = findViewById(R.id.etCorreo);
+        etContrasena   = findViewById(R.id.etContrasena);
+        etConfirmar    = findViewById(R.id.etConfirmar);
         btnRegistrarse = findViewById(R.id.btnRegistrarse);
         progressBar    = findViewById(R.id.progressBar);
 
@@ -53,11 +58,6 @@ public class RegistroActivity extends AppCompatActivity {
             return;
         }
 
-        if (!correo.toLowerCase().endsWith(".edu.pe")) {
-            Toast.makeText(this, getString(R.string.error_correo_invalido), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         if (!pass.equals(confirmar)) {
             Toast.makeText(this, getString(R.string.error_contrasenas), Toast.LENGTH_SHORT).show();
             return;
@@ -65,13 +65,34 @@ public class RegistroActivity extends AppCompatActivity {
 
         setLoading(true);
 
-        JsonObject body = new JsonObject();
-        body.addProperty("nombre",      nombre);
-        body.addProperty("correo",      correo);
-        body.addProperty("contrasena",  pass);
-        body.addProperty("contrasena2", confirmar);
+        // 1. Crear cuenta en Firebase Auth
+        mAuth.createUserWithEmailAndPassword(correo, pass)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful() && task.getResult().getUser() != null) {
+                        // 2. Obtener token y registrar en MySQL
+                        task.getResult().getUser().getIdToken(false)
+                                .addOnSuccessListener(r -> registrarEnBackend(r.getToken(), nombre));
+                    } else {
+                        setLoading(false);
+                        String msg = "Error al registrar";
+                        if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                            msg = "El correo ya está registrado";
+                        } else if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
+                            msg = "La contraseña debe tener al menos 6 caracteres";
+                        } else if (task.getException() != null) {
+                            msg = task.getException().getMessage();
+                        }
+                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 
-        ApiClient.getService().register(body).enqueue(new Callback<JsonObject>() {
+    private void registrarEnBackend(String firebaseToken, String nombre) {
+        JsonObject body = new JsonObject();
+        body.addProperty("firebase_token", firebaseToken);
+        body.addProperty("nombre", nombre);
+
+        ApiClient.getService().registroFirebase(body).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 setLoading(false);
@@ -81,6 +102,8 @@ public class RegistroActivity extends AppCompatActivity {
                     startActivity(new Intent(RegistroActivity.this, LoginActivity.class));
                     finish();
                 } else {
+                    // Si falla MySQL, eliminar cuenta de Firebase para no dejar huérfanos
+                    mAuth.getCurrentUser().delete();
                     String msg = "Error al registrar";
                     try {
                         JsonObject err = new com.google.gson.JsonParser()
@@ -94,6 +117,7 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 setLoading(false);
+                mAuth.getCurrentUser().delete();
                 Toast.makeText(RegistroActivity.this,
                         "Error de conexión. Verifica que el servidor esté activo.", Toast.LENGTH_LONG).show();
             }

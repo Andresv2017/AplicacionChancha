@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.aplicacionchancha" />
+                  <option name="mobileSdkAppId" value="1:951956947851:android:c3da1f11b5c967d828258e" />
+                  <option name="projectId" value="chancha-d8d24" />
+                  <option name="projectNumber" value="951956947851" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

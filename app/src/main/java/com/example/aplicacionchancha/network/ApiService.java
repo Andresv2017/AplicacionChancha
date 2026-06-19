@@ -2,12 +2,16 @@ package com.example.aplicacionchancha.network;
 
 import com.google.gson.JsonObject;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -15,6 +19,12 @@ public interface ApiService {
     // --- AUTH ---
     @POST("auth/register.php")
     Call<JsonObject> register(@Body JsonObject body);
+
+    @POST("auth/firebase_login.php")
+    Call<JsonObject> firebaseLogin(@Body JsonObject body);
+
+    @POST("auth/registro_firebase.php")
+    Call<JsonObject> registroFirebase(@Body JsonObject body);
 
     @POST("auth/login.php")
     Call<JsonObject> login(@Body JsonObject body);
@@ -41,6 +51,9 @@ public interface ApiService {
     @POST("grupos/unirse.php")
     Call<JsonObject> unirseGrupo(@Header("Authorization") String token, @Body JsonObject body);
 
+    @POST("usuario/fcm_token.php")
+    Call<JsonObject> guardarFcmToken(@Header("Authorization") String token, @Body JsonObject body);
+
     // --- USUARIO ---
     @GET("usuario/buscar.php")
     Call<JsonObject> buscarUsuario(@Header("Authorization") String token,
@@ -66,6 +79,16 @@ public interface ApiService {
     @GET("gastos/balances.php")
     Call<JsonObject> balancesGrupo(@Header("Authorization") String token, @Query("grupo_id") int grupoId);
 
+    @Multipart
+    @POST("gastos/subir_comprobante.php")
+    Call<JsonObject> subirComprobanteGasto(
+            @Header("Authorization") String token,
+            @Part("gasto_id") RequestBody gastoId,
+            @Part MultipartBody.Part comprobante);
+
+    @POST("gastos/revisar_pago.php")
+    Call<JsonObject> revisarPagoGasto(@Header("Authorization") String token, @Body JsonObject body);
+
     // --- COLECTAS ---
     @POST("colectas/crear.php")
     Call<JsonObject> crearColecta(@Header("Authorization") String token, @Body JsonObject body);
@@ -79,8 +102,12 @@ public interface ApiService {
     @GET("colectas/detalle.php")
     Call<JsonObject> detalleColectaPorQr(@Header("Authorization") String token, @Query("codigo_qr") String codigoQr);
 
+    @Multipart
     @POST("colectas/pagar.php")
-    Call<JsonObject> pagarColecta(@Header("Authorization") String token, @Body JsonObject body);
+    Call<JsonObject> pagarColecta(
+            @Header("Authorization") String token,
+            @Part("colecta_id") RequestBody colectaId,
+            @Part MultipartBody.Part comprobante);
 
     @POST("colectas/confirmar.php")
     Call<JsonObject> confirmarPago(@Header("Authorization") String token, @Body JsonObject body);

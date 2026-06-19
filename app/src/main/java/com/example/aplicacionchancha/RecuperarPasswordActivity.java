@@ -10,18 +10,21 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RecuperarPasswordActivity extends AppCompatActivity {
 
     private TextInputEditText etCorreo;
-    private Button btnEnviar;
-    private ProgressBar progressBar;
+    private Button            btnEnviar;
+    private ProgressBar       progressBar;
+    private FirebaseAuth      mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recuperar_password);
 
+        mAuth       = FirebaseAuth.getInstance();
         etCorreo    = findViewById(R.id.etCorreo);
         btnEnviar   = findViewById(R.id.btnEnviar);
         progressBar = findViewById(R.id.progressBar);
@@ -40,20 +43,17 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        if (!correo.toLowerCase().endsWith(".edu.pe")) {
-            Toast.makeText(this, getString(R.string.error_correo_invalido), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         progressBar.setVisibility(View.VISIBLE);
         btnEnviar.setEnabled(false);
 
-        new android.os.Handler().postDelayed(() -> {
-            progressBar.setVisibility(View.GONE);
-            btnEnviar.setEnabled(true);
-            Toast.makeText(this,
-                    "Si el correo está registrado, recibirás las instrucciones.",
-                    Toast.LENGTH_LONG).show();
-        }, 1500);
+        // Firebase envía automáticamente el correo de recuperación
+        mAuth.sendPasswordResetEmail(correo)
+                .addOnCompleteListener(task -> {
+                    progressBar.setVisibility(View.GONE);
+                    btnEnviar.setEnabled(true);
+                    Toast.makeText(this,
+                            "Si el correo está registrado, recibirás las instrucciones.",
+                            Toast.LENGTH_LONG).show();
+                });
     }
 }

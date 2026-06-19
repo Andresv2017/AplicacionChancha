@@ -93,14 +93,25 @@
                         android:textColor="@color/gray_text"
                         android:layout_marginBottom="16dp"/>
 
-                    <!-- Botón Pagar (solo visible si mi estado = pendiente) -->
+                    <!-- Botón subir comprobante (visible si pendiente) -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnPagar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Registrar mi pago"
+                        android:text="Subir comprobante de pago"
                         android:backgroundTint="@color/colorAccent"
                         android:textColor="@color/white"
+                        android:visibility="gone"/>
+
+                    <!-- Mensaje estado propio: en_revision o confirmado -->
+                    <TextView
+                        android:id="@+id/tvMiEstado"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textSize="13sp"
+                        android:textStyle="italic"
+                        android:gravity="center"
                         android:visibility="gone"/>
 
                 </LinearLayout>

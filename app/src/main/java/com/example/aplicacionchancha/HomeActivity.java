@@ -15,6 +15,7 @@ import com.example.aplicacionchancha.adapters.GroupAdapter;
 import com.example.aplicacionchancha.network.ApiClient;
 import com.example.aplicacionchancha.utils.SessionManager;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -159,6 +160,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void cerrarSesion() {
+        FirebaseAuth.getInstance().signOut();
         ApiClient.getService().logout(session.getBearerToken())
                 .enqueue(new Callback<JsonObject>() {
                     @Override

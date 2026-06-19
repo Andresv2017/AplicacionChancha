@@ -17,19 +17,19 @@ import java.util.List;
 
 public class PagoColectaAdapter extends RecyclerView.Adapter<PagoColectaAdapter.ViewHolder> {
 
-    public interface OnConfirmarListener {
-        void onConfirmar(int usuarioId);
+    public interface OnAccionListener {
+        void onVerComprobante(int usuarioId, String comprobante);
     }
 
-    private final List<JsonObject>    partes;
-    private final boolean             esAdmin;
-    private final OnConfirmarListener confirmarListener;
+    private final List<JsonObject> partes;
+    private final boolean          esAdmin;
+    private final OnAccionListener accionListener;
 
     public PagoColectaAdapter(List<JsonObject> partes, boolean esAdmin,
-                               OnConfirmarListener confirmarListener) {
-        this.partes            = partes;
-        this.esAdmin           = esAdmin;
-        this.confirmarListener = confirmarListener;
+                               OnAccionListener accionListener) {
+        this.partes         = partes;
+        this.esAdmin        = esAdmin;
+        this.accionListener = accionListener;
     }
 
     @NonNull
@@ -45,47 +45,39 @@ public class PagoColectaAdapter extends RecyclerView.Adapter<PagoColectaAdapter.
         JsonObject p   = partes.get(position);
         Context    ctx = holder.itemView.getContext();
 
-        int    usuarioId  = p.get("usuario_id").getAsInt();
-        String nombre     = p.get("nombre").getAsString();
-        String estadoPago = p.get("estado_pago").getAsString();
-        String metodo     = p.has("metodo_pago") && !p.get("metodo_pago").isJsonNull()
-                             ? p.get("metodo_pago").getAsString() : null;
+        int    usuarioId   = p.get("usuario_id").getAsInt();
+        String nombre      = p.get("nombre").getAsString();
+        String estadoPago  = p.get("estado_pago").getAsString();
+        String comprobante = (p.has("comprobante") && !p.get("comprobante").isJsonNull())
+                ? p.get("comprobante").getAsString() : null;
 
         holder.tvAvatar.setText(String.valueOf(nombre.charAt(0)).toUpperCase());
         holder.tvNombre.setText(nombre);
+        holder.tvMetodo.setVisibility(View.GONE);
+        holder.btnConfirmar.setVisibility(View.GONE);
 
-        // Mostrar método de pago si está disponible
-        if (metodo != null && !metodo.isEmpty()) {
-            holder.tvMetodo.setVisibility(View.VISIBLE);
-            holder.tvMetodo.setText("Vía: " + metodo);
-        } else {
-            holder.tvMetodo.setVisibility(View.GONE);
-        }
-
-        // Estado con color
         switch (estadoPago) {
-            case "pagado":
-                holder.tvEstado.setText("Pagado");
+            case "en_revision":
+                holder.tvEstado.setText("Comprobante enviado");
                 holder.tvEstado.setTextColor(ctx.getColor(R.color.colorPrimary));
-                // Admin puede confirmar pagos con estado "pagado"
-                if (esAdmin) {
+                if (esAdmin && comprobante != null) {
                     holder.btnConfirmar.setVisibility(View.VISIBLE);
+                    holder.btnConfirmar.setText("Ver comprobante");
                     holder.btnConfirmar.setOnClickListener(v -> {
-                        if (confirmarListener != null) confirmarListener.onConfirmar(usuarioId);
+                        if (accionListener != null)
+                            accionListener.onVerComprobante(usuarioId, comprobante);
                     });
-                } else {
-                    holder.btnConfirmar.setVisibility(View.GONE);
                 }
                 break;
+
             case "confirmado":
                 holder.tvEstado.setText("Confirmado ✓");
                 holder.tvEstado.setTextColor(ctx.getColor(R.color.success_green));
-                holder.btnConfirmar.setVisibility(View.GONE);
                 break;
-            default: // pendiente
+
+            default: // pendiente o pagado legado
                 holder.tvEstado.setText("Pendiente");
                 holder.tvEstado.setTextColor(ctx.getColor(R.color.error_red));
-                holder.btnConfirmar.setVisibility(View.GONE);
                 break;
         }
     }
@@ -99,11 +91,11 @@ public class PagoColectaAdapter extends RecyclerView.Adapter<PagoColectaAdapter.
 
         ViewHolder(View v) {
             super(v);
-            tvAvatar      = v.findViewById(R.id.tvAvatarPago);
-            tvNombre      = v.findViewById(R.id.tvNombrePago);
-            tvMetodo      = v.findViewById(R.id.tvMetodoPago);
-            tvEstado      = v.findViewById(R.id.tvEstadoPago);
-            btnConfirmar  = v.findViewById(R.id.btnConfirmar);
+            tvAvatar     = v.findViewById(R.id.tvAvatarPago);
+            tvNombre     = v.findViewById(R.id.tvNombrePago);
+            tvMetodo     = v.findViewById(R.id.tvMetodoPago);
+            tvEstado     = v.findViewById(R.id.tvEstadoPago);
+            btnConfirmar = v.findViewById(R.id.btnConfirmar);
         }
     }
 }
