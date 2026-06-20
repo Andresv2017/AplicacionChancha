@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Backend PHP - archivos sensibles y generados
+chancha-api/config/db.php
+chancha-api/config/chancha_db.sql
+chancha-api/uploads/comprobantes/*
+!chancha-api/uploads/comprobantes/.gitkeep
